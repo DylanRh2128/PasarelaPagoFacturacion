@@ -29,3 +29,9 @@ Requires `X-API-Key`. Lists all payments, most recent first, with their status
 
 Requires `X-API-Key`. Returns the invoice as `application/pdf`. `404` if the payment doesn't
 exist or hasn't succeeded yet (no invoice has been generated).
+
+## `GET /checkout-success` and `GET /checkout-cancelled`
+
+Plain HTML pages Stripe redirects the buyer to (point `CHECKOUT_SUCCESS_URL` /
+`CHECKOUT_CANCEL_URL` at them). Informational only — a payment counts as paid when the webhook
+says so, never because someone opened the success page.

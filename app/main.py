@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 from app.checkout import router as checkout_router
 from app.db import Base, engine
@@ -17,3 +18,15 @@ app.include_router(payments_router)
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+# Where Stripe Checkout sends the buyer back (CHECKOUT_SUCCESS_URL / CHECKOUT_CANCEL_URL).
+# The payment itself is confirmed by the webhook, not by landing here.
+@app.get("/checkout-success", response_class=HTMLResponse)
+def checkout_success():
+    return "<h1>Payment received</h1><p>Your invoice is generated once Stripe confirms the payment.</p>"
+
+
+@app.get("/checkout-cancelled", response_class=HTMLResponse)
+def checkout_cancelled():
+    return "<h1>Payment cancelled</h1><p>No charge was made.</p>"

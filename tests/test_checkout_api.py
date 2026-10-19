@@ -42,3 +42,8 @@ def test_create_checkout_reuses_existing_customer(client):
     with patch("app.checkout.create_checkout_session") as _:
         response = client.get("/payments", headers={"X-API-Key": "test-api-key"})
     assert len(response.json()) == 2
+
+
+def test_checkout_return_pages_exist(client):
+    assert client.get("/checkout-success").status_code == 200
+    assert client.get("/checkout-cancelled").status_code == 200
