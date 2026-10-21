@@ -53,5 +53,12 @@ def test_checkout_status_follows_the_webhook(client):
     with patch("app.checkout.create_checkout_session", return_value=fake_session("cs_test_status")):
         client.post("/checkout-sessions", json={"product_id": "report_generation", "customer_email": "a@b.co"})
 
-    assert client.get("/checkout-sessions/cs_test_status").json() == {"status": "pending", "invoice_number": None}
+    assert client.get("/checkout-sessions/cs_test_status").json() == {
+        "status": "pending",
+        "product": "Custom report generation",
+        "amount_cents": 2000,
+        "currency": "usd",
+        "invoice_number": None,
+    }
+    assert client.get("/checkout-sessions/cs_test_status/invoice.pdf").status_code == 404
     assert client.get("/checkout-sessions/cs_unknown").status_code == 404

@@ -38,7 +38,12 @@ says so, never because someone opened the success page.
 
 ## `GET /checkout-sessions/{session_id}`
 
-No auth: Checkout session ids are unguessable, and the response only carries what the success page
-needs — `{"status": "pending" | "succeeded", "invoice_number": "INV-000001" | null}`. `404` for an
-unknown session. The success page (Stripe appends `?session_id=...` to `CHECKOUT_SUCCESS_URL`)
+No auth: Checkout session ids are unguessable and only the buyer gets theirs (in the success URL).
+Returns `{"status": "pending" | "succeeded", "product", "amount_cents", "currency",
+"invoice_number": "INV-000001" | null}`. `404` for an unknown session. The success page (Stripe appends `?session_id=...` to `CHECKOUT_SUCCESS_URL`)
 polls it until the webhook marks the payment paid, then returns to the portfolio's main page.
+
+## `GET /checkout-sessions/{session_id}/invoice.pdf`
+
+Same rule (no auth, session id as the capability): the invoice PDF once the webhook has generated
+it, `404` before that.

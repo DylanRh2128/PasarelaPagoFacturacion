@@ -42,7 +42,10 @@ def test_webhook_marks_payment_succeeded_and_creates_invoice(client):
     payments = client.get("/payments", headers=HEADERS).json()
     assert payments[0]["status"] == "succeeded"
     status = client.get("/checkout-sessions/cs_test_123").json()
-    assert status == {"status": "succeeded", "invoice_number": f"INV-{payments[0]['id']:06d}"}
+    assert status["status"] == "succeeded"
+    assert status["invoice_number"] == f"INV-{payments[0]['id']:06d}"
+    invoice = client.get("/checkout-sessions/cs_test_123/invoice.pdf")
+    assert invoice.status_code == 200 and invoice.content.startswith(b"%PDF")
 
     pdf_response = client.get(f"/invoices/{payments[0]['id']}/pdf", headers=HEADERS)
     assert pdf_response.status_code == 200
