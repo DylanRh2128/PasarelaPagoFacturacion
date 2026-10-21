@@ -22,6 +22,7 @@ def create_checkout_session(product_id: str, customer_email: str):
                 "quantity": 1,
             }
         ],
-        success_url=os.environ["CHECKOUT_SUCCESS_URL"],
+        # Stripe fills in {CHECKOUT_SESSION_ID}, so the success page can wait for the webhook.
+        success_url=os.environ["CHECKOUT_SUCCESS_URL"] + "?session_id={CHECKOUT_SESSION_ID}",
         cancel_url=os.environ["CHECKOUT_CANCEL_URL"],
     )

@@ -17,6 +17,7 @@ def test_create_checkout_session_uses_catalog_amount(monkeypatch):
     _, kwargs = mocked_create.call_args
     assert kwargs["line_items"][0]["price_data"]["unit_amount"] == 5000
     assert kwargs["line_items"][0]["price_data"]["currency"] == "usd"
+    assert kwargs["success_url"] == "http://x/ok?session_id={CHECKOUT_SESSION_ID}"
 
 
 def test_unknown_product_never_calls_stripe():

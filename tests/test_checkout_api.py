@@ -47,3 +47,11 @@ def test_create_checkout_reuses_existing_customer(client):
 def test_checkout_return_pages_exist(client):
     assert client.get("/checkout-success").status_code == 200
     assert client.get("/checkout-cancelled").status_code == 200
+
+
+def test_checkout_status_follows_the_webhook(client):
+    with patch("app.checkout.create_checkout_session", return_value=fake_session("cs_test_status")):
+        client.post("/checkout-sessions", json={"product_id": "report_generation", "customer_email": "a@b.co"})
+
+    assert client.get("/checkout-sessions/cs_test_status").json() == {"status": "pending", "invoice_number": None}
+    assert client.get("/checkout-sessions/cs_unknown").status_code == 404

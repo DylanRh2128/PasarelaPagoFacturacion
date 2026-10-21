@@ -35,3 +35,10 @@ exist or hasn't succeeded yet (no invoice has been generated).
 Plain HTML pages Stripe redirects the buyer to (point `CHECKOUT_SUCCESS_URL` /
 `CHECKOUT_CANCEL_URL` at them). Informational only — a payment counts as paid when the webhook
 says so, never because someone opened the success page.
+
+## `GET /checkout-sessions/{session_id}`
+
+No auth: Checkout session ids are unguessable, and the response only carries what the success page
+needs — `{"status": "pending" | "succeeded", "invoice_number": "INV-000001" | null}`. `404` for an
+unknown session. The success page (Stripe appends `?session_id=...` to `CHECKOUT_SUCCESS_URL`)
+polls it until the webhook marks the payment paid, then returns to the portfolio's main page.
