@@ -5,12 +5,13 @@ import stripe
 from app.products import get_product
 
 
-def create_checkout_session(product_id: str, customer_email: str):
+def create_checkout_session(product_id: str, customer_email: str, language: str = "en"):
     product = get_product(product_id)  # raises UnknownProductError before calling Stripe
 
     stripe.api_key = os.environ["STRIPE_SECRET_KEY"]
     return stripe.checkout.Session.create(
         mode="payment",
+        locale=language,
         customer_email=customer_email,
         line_items=[
             {

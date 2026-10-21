@@ -23,7 +23,7 @@ def create_checkout(payload: CheckoutRequest, db: Session = Depends(get_db)):
         db.add(customer)
         db.flush()
 
-    session = create_checkout_session(payload.product_id, payload.customer_email)
+    session = create_checkout_session(payload.product_id, payload.customer_email, payload.language)
 
     payment = Payment(
         customer_id=customer.id,

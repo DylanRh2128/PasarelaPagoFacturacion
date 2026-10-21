@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel
 
@@ -6,6 +7,7 @@ from pydantic import BaseModel
 class CheckoutRequest(BaseModel):
     product_id: str
     customer_email: str
+    language: Literal["en", "es"] = "en"  # language of Stripe's hosted checkout page
 
 
 class CheckoutResponse(BaseModel):

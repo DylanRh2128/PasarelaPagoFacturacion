@@ -47,3 +47,8 @@ polls it until the webhook marks the payment paid, then returns to the portfolio
 
 Same rule (no auth, session id as the capability): the invoice PDF once the webhook has generated
 it, `404` before that.
+
+### Optional `language` field
+
+`POST /checkout-sessions` accepts `"language": "en"` (default) or `"es"`, passed to Stripe as the
+Checkout page `locale`.
